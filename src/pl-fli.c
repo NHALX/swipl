@@ -2102,6 +2102,99 @@ int
   return FALSE;
 }
 
+///////////////////////
+
+
+int _PL_relocate_arg(DECL_LD term_t keep, size_t keep_j, term_t bin, size_t bin_j)
+{
+    word w1 = valHandle(keep);
+    word w2 = valHandle(bin);
+
+    Functor f1 = (Functor)valPtr(w1);
+    Functor f2 = (Functor)valPtr(w2);
+
+    Word p1 = &f1->arguments[keep_j-1];
+    Word p2 = &f2->arguments[bin_j-1];
+
+    bindConsVal(p2, p1);
+    setVar(*p1);
+
+    return TRUE;
+}
+
+int (_PL_relocate_arg)(term_t keep, size_t keep_j, term_t bin, size_t bin_j)
+{   GET_LD
+    word w1 = valHandle(keep);
+    word w2 = valHandle(bin);
+
+    Functor f1 = (Functor)valPtr(w1);
+    Functor f2 = (Functor)valPtr(w2);
+
+    Word p1 = &f1->arguments[keep_j-1];
+    Word p2 = &f2->arguments[bin_j-1];
+
+    bindConsVal(p2, p1);
+    setVar(*p1);
+
+    return TRUE;
+}
+
+
+int (_PL_put_arg)(size_t index, term_t t, term_t t2)
+{   GET_LD
+    word w     = valHandle(t);
+    Functor f  = (Functor)valPtr(w);
+    Word    p1 = &f->arguments[index-1];
+
+    if (globalizeTermRef(t2))
+    {
+        bindConsVal(p1, valHandleP(t2));
+        return TRUE;
+    }
+
+    return FALSE;
+}
+
+int _PL_put_arg(DECL_LD size_t index, term_t t, term_t t2)
+{
+    word w     = valHandle(t);
+    Functor f  = (Functor)valPtr(w);
+    Word    p1 = &f->arguments[index-1];
+
+    if (globalizeTermRef(t2))
+    {
+        bindConsVal(p1, valHandleP(t2));
+        return TRUE;
+    }
+
+    return FALSE;
+}
+
+
+int
+_PL_clear_arg(DECL_LD size_t index, term_t t)
+{ word w = valHandle(t);
+  Functor f = (Functor)valPtr(w);
+  Word p = &f->arguments[index-1];
+  setVar(*p);
+
+  return TRUE;
+}
+
+int
+(_PL_clear_arg)(size_t index, term_t t)
+{ GET_LD
+  word w = valHandle(t);
+  Functor f = (Functor)valPtr(w);
+  Word p = &f->arguments[index-1];
+  setVar(*p);
+
+  return TRUE;
+}
+
+///////////////////////
+
+
 #ifdef O_ATTVAR
 API_STUB(int)
 (PL_get_attr)(term_t t, term_t a)

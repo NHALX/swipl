@@ -61,6 +61,9 @@
 #define	pushWordAsTermRef(p)			LDFUNC(pushWordAsTermRef, p)
 #define	popTermRef(_)				LDFUNC(popTermRef, _)
 #define	_PL_get_arg(index, t, a)		LDFUNC(_PL_get_arg, index, t, a)
+#define	_PL_put_arg(index, t, a)		LDFUNC(_PL_put_arg, index, t, a)
+#define _PL_clear_arg(index, t)         LDFUNC(_PL_clear_arg, index, t)
+#define _PL_relocate_arg(keep, keep_j, bin, bin_j) LDFUNC(_PL_relocate_arg, keep, keep_j, bin, bin_j)
 #define	PL_new_term_ref(_)			LDFUNC(PL_new_term_ref, _)
 #define	PL_new_term_ref_noshift(_)		LDFUNC(PL_new_term_ref_noshift, _)
 #define	PL_new_term_refs(n)			LDFUNC(PL_new_term_refs, n)
@@ -123,6 +126,9 @@ int		PL_unify_termv(term_t t, va_list args);
 term_t		pushWordAsTermRef(Word p);
 void		popTermRef(void);
 int		_PL_get_arg(size_t index, term_t t, term_t a);
+int		_PL_put_arg(size_t index, term_t t, term_t t2);
+int     _PL_clear_arg(size_t index, term_t t);
+int     _PL_relocate_arg(term_t keep, size_t keep_j, term_t bin, size_t bin_j);
 term_t		PL_new_term_ref(void);
 term_t		PL_new_term_ref_noshift(void);
 term_t		PL_new_term_refs(int n);
@@ -205,7 +211,7 @@ int		get_string_text(atom_t atom, PL_chars_t *text);
 
 #if USE_FLI_INLINES || EMIT_FLI_INLINES
 #include "pl-wam.h"
-	
+
 #define setHandle(h, w)		(*valTermRef(h) = (w))
 #define valHandleP(h)		valTermRef(h)
 

@@ -860,6 +860,9 @@ PL_EXPORT(void)		_PL_put_atomic(term_t t, PL_atomic_t a);
 PL_EXPORT(int)		_PL_unify_atomic(term_t t, PL_atomic_t a);
 PL_EXPORT(int)		_PL_get_arg_sz(size_t index, term_t t, term_t a);
 PL_EXPORT(int)		_PL_get_arg(int index, term_t t, term_t a);
+PL_EXPORT(int)		_PL_clear_arg(size_t index, term_t t);
+PL_EXPORT(int)		_PL_put_arg(size_t index, term_t t, term_t t2);
+PL_EXPORT(int)      _PL_relocate_arg(term_t keep, size_t keep_j, term_t bin, size_t bin_j);
 
 
 		 /*******************************
