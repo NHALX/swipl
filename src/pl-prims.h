@@ -54,9 +54,17 @@
 #define	pl_statistics_ld(k, value, ld)	LDFUNC(pl_statistics_ld, k, value, ld)
 #define	ground(p)			LDFUNC(ground, p)
 #define	PL_same_term(t1, t2)		LDFUNC(PL_same_term, t1, t2)
+#define setarg(n, term, value, flags) LDFUNC(setarg, n, term, value, flags)
+
 #endif /*USE_LD_MACROS*/
 
 #define LDFUNC_DECLARATIONS
+
+
+#define SETARG_BACKTRACKABLE    0x1
+#define SETARG_LINK		0x2
+
+word    setarg(term_t n, term_t term, term_t value, int flags);
 
 int		unify_ptrs(Word t1, Word t2, int flags);
 void		unify_vp(Word vp, Word val);

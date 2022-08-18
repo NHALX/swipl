@@ -2145,29 +2145,66 @@ int (_PL_put_arg)(size_t index, term_t t, term_t t2)
     word w     = valHandle(t);
     Functor f  = (Functor)valPtr(w);
     Word    p1 = &f->arguments[index-1];
+/*
+  if (globalizeTermRef(t2))
+  {
+  bindConsVal(p1, valHandleP(t2));
+  return TRUE;
+  }
+*/
 
-    if (globalizeTermRef(t2))
-    {
-        bindConsVal(p1, valHandleP(t2));
-        return TRUE;
-    }
+    word w2;
+    Word p2;
 
-    return FALSE;
+    p2 = valTermRef(t2);
+    deRef(p2);
+    w2 = *p2;
+/*
+    if ( storage(w2) == STG_GLOBAL )
+    { freezeGlobal();
+        LD->gvar.grefs++;
+    } else if ( isAtom(w2) )
+        PL_register_atom(w2);
+*/
+    *p1 = w2;
+
+
+    return TRUE;
 }
+
+
 
 int _PL_put_arg(DECL_LD size_t index, term_t t, term_t t2)
 {
     word w     = valHandle(t);
     Functor f  = (Functor)valPtr(w);
     Word    p1 = &f->arguments[index-1];
+/*
+  if (globalizeTermRef(t2))
+  {
+  bindConsVal(p1, valHandleP(t2));
+  return TRUE;
+  }
+*/
 
-    if (globalizeTermRef(t2))
-    {
-        bindConsVal(p1, valHandleP(t2));
-        return TRUE;
-    }
+    word w2;
+    Word p2;
 
-    return FALSE;
+    p2 = valTermRef(t2);
+    deRef(p2);
+    w2 = *p2;
+/*
+    if ( storage(w2) == STG_GLOBAL )
+    { freezeGlobal();
+        LD->gvar.grefs++;
+    } else if ( isAtom(w2) )
+        PL_register_atom(w2);
+*/
+    *p1 = w2;
+
+
+    return TRUE;
+
 }
 
 
@@ -2191,6 +2228,60 @@ int
 
   return TRUE;
 }
+
+
+///////////////////////
+
+
+int
+PL_set_arg(DECL_LD size_t n, term_t term, term_t value)
+{
+    term_t t = PL_new_term_ref();
+    PL_put_int64(t, n);
+    return setarg(t, term, value, SETARG_BACKTRACKABLE);
+}
+
+int
+PL_nb_set_arg(DECL_LD size_t n, term_t term, term_t value)
+{
+    term_t t = PL_new_term_ref();
+    PL_put_int64(t, n);
+    return setarg(t, term, value, 0);
+}
+
+int
+PL_nb_link_arg(DECL_LD size_t n, term_t term, term_t value)
+{
+    term_t t = PL_new_term_ref();
+    PL_put_int64(t, n);
+    return setarg(t, term, value, SETARG_LINK);
+}
+
+
+int
+(PL_set_arg)(size_t n, term_t term, term_t value)
+{ GET_LD
+  term_t t = PL_new_term_ref();
+  PL_put_int64(t, n);
+  return setarg(t, term, value, SETARG_BACKTRACKABLE);
+}
+
+int
+(PL_nb_set_arg)(size_t n, term_t term, term_t value)
+{ GET_LD
+  term_t t = PL_new_term_ref();
+  PL_put_int64(t, n);
+  return setarg(t, term, value, 0);
+}
+
+int
+(PL_nb_link_arg)(size_t n, term_t term, term_t value)
+{ GET_LD
+  term_t t = PL_new_term_ref();
+  PL_put_int64(t, n);
+  return setarg(t, term, value, SETARG_LINK);
+}
+
 
 ///////////////////////
 
@@ -5036,6 +5127,66 @@ PL_dispatch(int fd, int wait)
   return TRUE;
 }
 
+
+		 /*******************************
+		 *	Global Variables	*
+		 *******************************/
+
+
+
+// nb_getval
+int (PL_nb_getval)(term_t var, term_t value)
+{
+    GET_LD
+    return getval(var, value, TRUE);
+}
+
+int PL_nb_getval(DECL_LD term_t var, term_t value)
+{
+    return getval(var, value, TRUE);
+}
+
+
+// nb_linkval
+
+int (PL_nb_linkval)(term_t var, term_t value)
+{
+    GET_LD
+    return setval(var, value, FALSE);
+}
+
+int PL_nb_linkval(DECL_LD term_t var, term_t value)
+{
+    return setval(var, value, FALSE);
+}
+
+
+// b_setval
+
+int (PL_b_setval)(term_t var, term_t value)
+{
+    GET_LD
+    return setval(var, value, TRUE);
+}
+
+int PL_b_setval(DECL_LD term_t var, term_t value)
+{
+    return setval(var, value, TRUE);
+}
+
+// b_getval
+
+int (PL_b_getval)(term_t var, term_t value)
+{
+    GET_LD
+    return getval(var, value, TRUE);
+}
+
+
+int PL_b_getval(DECL_LD term_t var, term_t value)
+{
+    return getval(var, value, TRUE);
+}
 
 		 /*******************************
 		 *	RECORDED DATABASE	*

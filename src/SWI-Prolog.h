@@ -588,6 +588,11 @@ PL_EXPORT(int)		PL_put_term(term_t t1, term_t t2) WUNUSED;
 PL_EXPORT(int)		PL_put_dict(term_t t, atom_t tag, size_t len,
 				    const atom_t *keys, term_t values);
 
+			/* Special assignment to compounds */
+PL_EXPORT(int) PL_set_arg(size_t n, term_t term, term_t value);
+PL_EXPORT(int) PL_nb_set_arg(size_t n, term_t term, term_t value);
+PL_EXPORT(int) PL_nb_link_arg(size_t n, term_t term, term_t value);
+
 			/* construct a functor or list-cell */
 PL_EXPORT(int)		PL_cons_functor(term_t h, functor_t f, ...) WUNUSED;
 PL_EXPORT(int)		PL_cons_functor_v(term_t h, functor_t fd, term_t a0) WUNUSED;
@@ -863,6 +868,15 @@ PL_EXPORT(int)		_PL_get_arg(int index, term_t t, term_t a);
 PL_EXPORT(int)		_PL_clear_arg(size_t index, term_t t);
 PL_EXPORT(int)		_PL_put_arg(size_t index, term_t t, term_t t2);
 PL_EXPORT(int)      _PL_relocate_arg(term_t keep, size_t keep_j, term_t bin, size_t bin_j);
+
+		 /*******************************
+		 *	GLOBAL SYMBOLS	*
+		 *******************************/
+
+PL_EXPORT(int)      PL_b_getval(term_t var, term_t value);
+PL_EXPORT(int)      PL_b_setval(term_t var, term_t value);
+PL_EXPORT(int)      PL_nb_linkval(term_t var, term_t value);
+PL_EXPORT(int)      PL_nb_getval(term_t var, term_t value);
 
 
 		 /*******************************

@@ -131,8 +131,8 @@ SHIFT-SAFE: TrailAssignment() takes at most g+t=1+2.  One more Trail and
 	    2 more allocGlobal(1) makes g+t<3+3
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-#define setval(var, value, backtrackable) LDFUNC(setval, var, value, backtrackable)
-static int
+
+int
 setval(DECL_LD term_t var, term_t value, int backtrackable)
 { atom_t name;
   Word p;
@@ -280,8 +280,8 @@ is_gval(DECL_LD word w)
 }
 
 
-#define getval(var, value, raise_error) LDFUNC(getval, var, value, raise_error)
-static int
+
+int
 getval(DECL_LD term_t var, term_t value, int raise_error)
 { atom_t name;
   int i;
@@ -325,13 +325,6 @@ error:
 }
 
 
-static
-PRED_IMPL("nb_linkval", 2, nb_linkval, 0)
-{ PRED_LD
-
-  return setval(A1, A2, FALSE);
-}
-
 
 static
 PRED_IMPL("nb_getval", 2, nb_getval, 0)
@@ -342,11 +335,19 @@ PRED_IMPL("nb_getval", 2, nb_getval, 0)
 
 
 static
+PRED_IMPL("nb_linkval", 2, nb_linkval, 0)
+{ PRED_LD
+
+  return setval(A1, A2, FALSE);
+}
+
+static
 PRED_IMPL("b_setval", 2, b_setval, 0)
 { PRED_LD
 
   return setval(A1, A2, TRUE);
 }
+
 
 static
 PRED_IMPL("b_getval", 2, b_getval, 0)
@@ -354,6 +355,7 @@ PRED_IMPL("b_getval", 2, b_getval, 0)
 
   return getval(A1, A2, TRUE);
 }
+
 
 
 static

@@ -41,6 +41,8 @@
 #if USE_LD_MACROS
 #define	freezeGlobal(_)		LDFUNC(freezeGlobal, _)
 #define	gvar_value(name, p)	LDFUNC(gvar_value, name, p)
+#define setval(var, value, backtrackable) LDFUNC(setval, var, value, backtrackable)
+#define getval(var, value, raise_error) LDFUNC(getval, var, value, raise_error)
 #endif /*USE_LD_MACROS*/
 
 #define LDFUNC_DECLARATIONS
@@ -48,6 +50,9 @@
 void	destroyGlobalVars(void);
 void	freezeGlobal(void);
 int	gvar_value(atom_t name, Word p);
+
+int getval(term_t var, term_t value, int raise_error);
+int setval(term_t var, term_t value, int backtrackable);
 
 #undef LDFUNC_DECLARATIONS
 

@@ -2454,8 +2454,6 @@ PRED_IMPL("arg", 3, arg, PL_FA_NONDETERMINISTIC)
 }
 
 
-#define SETARG_BACKTRACKABLE    0x1
-#define SETARG_LINK		0x2
 
 
 /* unify_vp() assumes *vp is a variable and binds it to val.
@@ -2487,8 +2485,8 @@ unify_vp(DECL_LD Word vp, Word val)
 }
 
 
-#define setarg(n, term, value, flags) LDFUNC(setarg, n, term, value, flags)
-static word
+
+word
 setarg(DECL_LD term_t n, term_t term, term_t value, int flags)
 { size_t arity, argn;
   atom_t name;
